@@ -7,7 +7,6 @@ const useLocalStorage: <T>(
   const [value, setValue] = useState(() => {
     if (typeof window !== "undefined") {
       const item = window?.localStorage?.getItem(key);
-      console.log(item);
       return item ? JSON.parse(item) : initialValue;
     }
   });

@@ -1,27 +1,20 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --focus: #ff0000;
+  --bg: #000000;
+  --fg: #ffffff;
 }
 
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-geist-sans);
+  font-size: 1.1rem;
+  image-rendering: pixelated;
+  background-color: var(--bg);
+  color: var(--fg);
 }
 
 * {
@@ -30,13 +23,69 @@ body {
   margin: 0;
 }
 
+a:active,
+a:focus,
+button:active,
+button:focus {
+  outline: 2px solid var(--focus);
+}
+
 a {
   color: inherit;
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+button,
+select {
+  cursor: pointer;
+  padding: 0.1rem 0.5rem;
+  font-size: 1rem;
+}
+
+img {
+  display: block;
+  border: 1px solid var(--fg);
+}
+
+code,
+pre {
+  font-family: var(--font-geist-mono);
+  font-size: 0.9rem;
+}
+
+pre {
+  background-color: var(--bg);
+  padding: 10px;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.grid-200 {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.grid-400 {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.span-all {
+  grid-column: 1 / -1;
+}
+
+.flex {
+  display: flex;
+  gap: 10px;
+}
+
+.box {
+  padding: 10px;
+  border: 1px solid var(--fg);
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

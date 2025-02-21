@@ -907,19 +907,6 @@ const PersonMovesEditor = ({
   );
 
   useEffect(() => {
-    if (editing === "moveList") {
-      const newSceneEvent = deleteMapEntry(sceneEvent, "destinationPosition");
-      setSceneEvent({ ...newSceneEvent, moveList: [] });
-      setInputValue([]);
-    }
-    if (editing === "destinationPosition") {
-      const newSceneEvent = deleteMapEntry(sceneEvent, "moveList");
-      setSceneEvent({ ...newSceneEvent, destinationPosition: { x: 0, y: 0 } });
-      setInputValue({ x: 0, y: 0 });
-    }
-  }, [editing]);
-
-  useEffect(() => {
     setSceneEvent({
       ...sceneEvent,
       [editing === "moveList" ? "moveList" : "destinationPosition"]: inputValue,
@@ -960,13 +947,29 @@ const PersonMovesEditor = ({
       <Button.Group>
         <Button
           variant={editing === "moveList" ? "filled" : "outline"}
-          onClick={() => setEditing("moveList")}
+          onClick={() => {
+            setEditing("moveList");
+            const newSceneEvent = deleteMapEntry(
+              sceneEvent,
+              "destinationPosition"
+            );
+            setSceneEvent({ ...newSceneEvent, moveList: [] });
+            setInputValue([]);
+          }}
         >
           Move List
         </Button>
         <Button
           variant={editing === "destinationPosition" ? "filled" : "outline"}
-          onClick={() => setEditing("destinationPosition")}
+          onClick={() => {
+            setEditing("destinationPosition");
+            const newSceneEvent = deleteMapEntry(sceneEvent, "moveList");
+            setSceneEvent({
+              ...newSceneEvent,
+              destinationPosition: { x: 0, y: 0 },
+            });
+            setInputValue({ x: 0, y: 0 });
+          }}
         >
           Destination Position
         </Button>

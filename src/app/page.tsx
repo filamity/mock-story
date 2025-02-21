@@ -48,7 +48,7 @@ const Home: React.FC = () => {
   );
   const [level, setLevel] = useLocalStorage<string>("level", "InterviewRoom");
 
-  const currentLevel = levels.find((l) => l.name === level);
+  const currentLevel = levels?.find((l) => l.name === level);
 
   const createNewScenario = () => {
     const newScenario: Scenario = {

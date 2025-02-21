@@ -1,5 +1,3 @@
-import { Vector2 } from "./Vector2";
-
 export type Conditions = {
   requires: string[];
   bypass: string[];
@@ -34,9 +32,13 @@ export type HeroData = {
   facingDirection: Direction;
 };
 
-type Unit = any;
 type Main = any;
 type Battle = any;
+
+export type Vector2 = {
+  x: number;
+  y: number;
+};
 
 export type BattleActionTarget =
   | "self"
@@ -233,7 +235,7 @@ export const DEFAULT_SCENE_EVENT_VALUES = {
   CHANGE_LEVEL: {
     levelId: "",
     heroData: {
-      position: new Vector2(0, 0),
+      position: { x: 0, y: 0 },
       facingDirection: DIRECTIONS.DOWN,
     },
   },

@@ -18,6 +18,7 @@ import {
   SceneEvent,
   STORY_FLAGS,
   UP,
+  Vector2,
 } from "./utils/types";
 import { useEffect, useState } from "react";
 import {
@@ -29,7 +30,6 @@ import {
   Textarea,
 } from "@mantine/core";
 import { deleteMapEntry } from "./utils/deleteMapEntry";
-import { Vector2 } from "./utils/Vector2";
 
 interface Level {
   name: string;

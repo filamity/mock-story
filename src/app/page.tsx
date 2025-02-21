@@ -238,7 +238,7 @@ const SceneEditor = ({
                           j === i
                             ? {
                                 type: value,
-                                // @ts-ignore
+                                // @ts-expect-error
                                 ...DEFAULT_SCENE_EVENT_VALUES[value],
                               }
                             : s

@@ -16,7 +16,6 @@ import {
   Scenario,
   SCENE_EVENTS,
   SceneEvent,
-  STORY_FLAGS,
   UP,
   Vector2,
 } from "./utils/types";
@@ -38,6 +37,10 @@ interface Level {
 }
 
 const Home: React.FC = () => {
+  const [flags, setFlags] = useLocalStorage<string[]>("flags", []);
+  const [flagInputValue, setFlagInputValue] = useState("");
+  const [flagDeleteValue, setFlagDeleteValue] = useState("");
+
   const [levels, setLevels] = useLocalStorage<Level[]>(
     "levels",
     Object.keys(LEVELS_MAPS).map((key) => ({
@@ -73,6 +76,40 @@ const Home: React.FC = () => {
   return (
     <div className={styles.page}>
       <section>
+        <strong>Flags</strong>
+        <div className="grid-200">
+          <Input
+            value={flagInputValue}
+            placeholder="New Flag"
+            onChange={(event) => setFlagInputValue(event.currentTarget.value)}
+          />
+          <Button
+            onClick={() => {
+              setFlags([...flags, flagInputValue]);
+              setFlagInputValue("");
+            }}
+          >
+            Add Flag
+          </Button>
+          <Select
+            data={flags}
+            value={flagDeleteValue}
+            placeholder="Delete Flag"
+            onChange={(value) => value && setFlagDeleteValue(value)}
+          />
+          <Button
+            onClick={() => {
+              setFlags(flags.filter((f) => f !== flagDeleteValue));
+              setFlagDeleteValue("");
+            }}
+          >
+            Delete Flag
+          </Button>
+        </div>
+      </section>
+
+      <section>
+        <strong>Level</strong>
         <Select
           data={LEVELS}
           value={level}
@@ -83,6 +120,7 @@ const Home: React.FC = () => {
       {currentLevel && (
         <>
           <section>
+            <strong>Map</strong>
             <img src={currentLevel.image} alt={currentLevel.name} />
           </section>
 
@@ -92,7 +130,7 @@ const Home: React.FC = () => {
               <div className="box" key={i}>
                 <div className="grid-200">
                   <MultiSelect
-                    data={Object.keys(STORY_FLAGS)}
+                    data={Object.keys(flags)}
                     placeholder="Requires"
                     value={scenario.conditions.requires}
                     onChange={(value) =>
@@ -119,7 +157,7 @@ const Home: React.FC = () => {
                     }
                   />
                   <MultiSelect
-                    data={Object.keys(STORY_FLAGS)}
+                    data={Object.keys(flags)}
                     placeholder="Bypass"
                     value={scenario.conditions.bypass}
                     onChange={(value) =>
@@ -174,6 +212,7 @@ const Home: React.FC = () => {
                   </Button>
                 </div>
                 <SceneEditor
+                  flags={flags}
                   scene={scenario.scene}
                   setScene={(value) =>
                     setLevels(
@@ -204,10 +243,12 @@ const Home: React.FC = () => {
 
 const SceneEditor = ({
   name = "Scene",
+  flags,
   scene,
   setScene,
 }: {
   name?: string;
+  flags: string[];
   scene: SceneEvent[];
   setScene: (value: SceneEvent[]) => void;
 }) => {
@@ -390,6 +431,7 @@ const SceneEditor = ({
                         </div>
                         <SceneEditor
                           scene={choice.scene}
+                          flags={flags}
                           setScene={(value) =>
                             setScene(
                               scene.map((s, k) =>
@@ -463,6 +505,7 @@ const SceneEditor = ({
                     />
                     <SceneEditor
                       name="Victory Scene"
+                      flags={flags}
                       scene={se.victoryScene!}
                       setScene={(value) =>
                         setScene(
@@ -474,6 +517,7 @@ const SceneEditor = ({
                     />
                     <SceneEditor
                       name="Defeat Scene"
+                      flags={flags}
                       scene={se.defeatScene!}
                       setScene={(value) =>
                         setScene(
@@ -485,6 +529,7 @@ const SceneEditor = ({
                     />
                     <SceneEditor
                       name="Run Scene"
+                      flags={flags}
                       scene={se.runScene!}
                       setScene={(value) =>
                         setScene(
@@ -579,7 +624,7 @@ const SceneEditor = ({
                   <>
                     <pre>{JSON.stringify(se, null, 2)}</pre>
                     <Select
-                      data={Object.keys(STORY_FLAGS)}
+                      data={Object.keys(flags)}
                       value={se.addsFlag}
                       placeholder="Adds Flag"
                       onChange={(value) =>

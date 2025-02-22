@@ -108,12 +108,6 @@ export const PORTRAITS = {
   portraitInterviewer4: "portraitInterviewer4",
 };
 
-export const STORY_FLAGS = {
-  CRITERIA_1: "CRITERIA_1",
-  CRITERIA_2: "CRITERIA_2",
-  CRITERIA_3: "CRITERIA_3",
-};
-
 export const BATTLE_UNITS = {
   hero: "hero",
   pookie: "pookie",

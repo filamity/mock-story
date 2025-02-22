@@ -130,7 +130,7 @@ const Home: React.FC = () => {
               <div className="box" key={i}>
                 <div className="grid-200">
                   <MultiSelect
-                    data={Object.keys(flags)}
+                    data={flags}
                     placeholder="Requires"
                     value={scenario.conditions.requires}
                     onChange={(value) =>
@@ -157,7 +157,7 @@ const Home: React.FC = () => {
                     }
                   />
                   <MultiSelect
-                    data={Object.keys(flags)}
+                    data={flags}
                     placeholder="Bypass"
                     value={scenario.conditions.bypass}
                     onChange={(value) =>
@@ -624,7 +624,7 @@ const SceneEditor = ({
                   <>
                     <pre>{JSON.stringify(se, null, 2)}</pre>
                     <Select
-                      data={Object.keys(flags)}
+                      data={flags}
                       value={se.addsFlag}
                       placeholder="Adds Flag"
                       onChange={(value) =>

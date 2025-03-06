@@ -269,6 +269,21 @@ const SceneEditor = ({
                 }`}
               >
                 <div className="flex">
+                  <Button
+                    onClick={() => {
+                      const newScene = [...scene];
+                      newScene.splice(i, 0, {
+                        type: SCENE_EVENTS.TEXT_BOX,
+                        ...DEFAULT_SCENE_EVENT_VALUES.TEXT_BOX,
+                      });
+                      setScene(newScene);
+                    }}
+                  >
+                    Add Before
+                  </Button>
+                </div>
+
+                <div className="flex">
                   <Select
                     data={Object.keys(SCENE_EVENTS)}
                     value={se.type}

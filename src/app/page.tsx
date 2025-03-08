@@ -51,10 +51,13 @@ const Home: React.FC = () => {
   );
   const [level, setLevel] = useLocalStorage<string>("level", "InterviewRoom");
 
+  const [loadDataValue, setLoadDataValue] = useState("");
+
   const currentLevel = levels?.find((l) => l.name === level);
 
   const createNewScenario = () => {
     const newScenario: Scenario = {
+      name: "Scenario",
       conditions: {
         requires: [],
         bypass: [],
@@ -72,6 +75,13 @@ const Home: React.FC = () => {
       )
     );
   };
+
+  function objectStringToJSON(jsStr: string): string {
+    // add quotes to keys and remove trailing commas
+    return jsStr
+      .replace(/(?<!["'\w])([a-zA-Z_][a-zA-Z0-9_]*)\s*:/g, '"$1":')
+      .replace(/,\s*([\]}])/g, "$1");
+  }
 
   return (
     <div className={styles.page}>
@@ -129,6 +139,60 @@ const Home: React.FC = () => {
             {currentLevel.scenarios.map((scenario, i) => (
               <div className="box" key={i}>
                 <div className="grid-200">
+                  <Input
+                    style={{ gridColumn: "span 2" }}
+                    value={scenario.name}
+                    placeholder="Scenario Name"
+                    onChange={(event) =>
+                      setLevels(
+                        levels.map((l) =>
+                          l.name === level
+                            ? {
+                                ...l,
+                                scenarios: l.scenarios.map((s, j) =>
+                                  j === i
+                                    ? { ...s, name: event.currentTarget.value }
+                                    : s
+                                ),
+                              }
+                            : l
+                        )
+                      )
+                    }
+                  />
+                  <Input
+                    value={loadDataValue}
+                    placeholder="Load Scene Events"
+                    onChange={(event) =>
+                      setLoadDataValue(event.currentTarget.value)
+                    }
+                  />
+                  <Button
+                    onClick={() => {
+                      try {
+                        const data = JSON.parse(
+                          objectStringToJSON(loadDataValue)
+                        );
+                        console.log(data);
+                        setLevels(
+                          levels.map((l) =>
+                            l.name === level
+                              ? {
+                                  ...l,
+                                  scenarios: l.scenarios.map((s, j) =>
+                                    j === i ? { ...s, scene: data } : s
+                                  ),
+                                }
+                              : l
+                          )
+                        );
+                      } catch (e) {
+                        console.error(e);
+                      }
+                    }}
+                  >
+                    Load
+                  </Button>
                   <MultiSelect
                     data={flags}
                     placeholder="Requires"
@@ -212,6 +276,9 @@ const Home: React.FC = () => {
                   </Button>
                 </div>
                 <SceneEditor
+                  name={`${scenario.name || "Scene Events"} (${
+                    scenario.scene.length
+                  })`}
                   flags={flags}
                   scene={scenario.scene}
                   setScene={(value) =>
@@ -445,6 +512,7 @@ const SceneEditor = ({
                           </Button>
                         </div>
                         <SceneEditor
+                          name={`Scene Events (${choice.scene.length})`}
                           scene={choice.scene}
                           flags={flags}
                           setScene={(value) =>
@@ -519,7 +587,7 @@ const SceneEditor = ({
                       }
                     />
                     <SceneEditor
-                      name="Victory Scene"
+                      name={`Victory Scene (${se.victoryScene?.length})`}
                       flags={flags}
                       scene={se.victoryScene!}
                       setScene={(value) =>
@@ -531,7 +599,7 @@ const SceneEditor = ({
                       }
                     />
                     <SceneEditor
-                      name="Defeat Scene"
+                      name={`Defeat Scene (${se.defeatScene?.length})`}
                       flags={flags}
                       scene={se.defeatScene!}
                       setScene={(value) =>
@@ -543,7 +611,7 @@ const SceneEditor = ({
                       }
                     />
                     <SceneEditor
-                      name="Run Scene"
+                      name={`Run Scene (${se.runScene?.length})`}
                       flags={flags}
                       scene={se.runScene!}
                       setScene={(value) =>

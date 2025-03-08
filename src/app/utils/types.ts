@@ -4,6 +4,7 @@ export type Conditions = {
 };
 
 export type Scenario = {
+  name: string;
   conditions: Conditions;
   scene: SceneEvent[];
 };
